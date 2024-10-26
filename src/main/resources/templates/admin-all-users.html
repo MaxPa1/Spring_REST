@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+<div>
+  <h2>All Users</h2>
+  <br><br>
+  <table th:border="0">
+    <tr>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Age</th>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr >
+    <tr th:each="user : ${allUsers}">
+      <td th:text="${user.getName()}"></td>
+      <td th:text="${user.getSurname()}"></td>
+      <td th:text="${user.getAge()}"></td>
+      <td th:text="${user.username}"></td>
+      <td th:text="${user.roles}"></td>
+      <td>
+        <form th:method="Get" th:action="@{/admin/updateUser}">
+          <input type="hidden" name="id" th:value="${user.getId()}"/>
+          <input type="submit" value="Update"/>
+        </form>
+      </td>
+      <td>
+        <form th:method="POST" th:action="@{/admin/deleteUser(id=${user.getId()})}">
+          <input type="submit" value="Delete"/>
+        </form>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <input type="button" value="Add"
+         onclick="window.location.href='admin/addNewUser'"/>
+</div>
+<br>
+<a href="/logout">Logout</a>
+</body>
+</html>

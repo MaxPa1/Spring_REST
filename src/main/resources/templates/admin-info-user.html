@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New user</title>
+</head>
+<body>
+<h1>User info</h1>
+<br>
+<form th:method="POST" th:action="@{/admin/saveUser}" th:object="${user}">
+  <div>
+    <input type="hidden" th:field="*{id}">
+    <label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    <br>
+    <label for="surname">Surname</label>
+    <input type="text" th:field="*{surname}" id="surname"/>
+    <div style="color: red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></div>
+    <br>
+    <label for="age">Age</label>
+    <input type="number" th:field="*{age}" id="age"/>
+    <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+    <br>
+    <label for="username">Username </label>
+    <input type="text" th:field="*{username}" id="username"/>
+    <div style="color: red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+    <br>
+    <label for="password">Password </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    <br>
+    <p>
+      <label>Roles:
+        <input type="checkbox" name="roles"
+               th:each="role : ${allRoles}"
+               th:text="${role.roleName}"
+               th:value="${role.id}"
+               th:field="*{roles}"
+        />
+      </label>
+    </p>
+    <input type="submit" value="add"/>
+  </div>
+</form>
+<br>
+<a href="/logout">Logout</a>
+</body>
+</html>
