@@ -14,12 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.Collection;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,30 +28,21 @@ public class User implements UserDetails {
     private Long id;
 
     @Column
-    @NotEmpty(message = "Name should not be empty")
-    @Size(min = 2, max = 25 , message = "Name must be between 2 and 25 characters long")
-    private String name;
+    private String firstName;
 
     @Column
-    @NotEmpty(message = "Surname should not be empty")
-    @Size(min = 2, max = 25, message = "Surname must be between 2 and 25 characters long")
-    private String surname;
+    private String lastName;
 
     @Column
-    @Min(value = 0, message = "Age should be greater than 0")
-    @Max(value = 120 ,message = "Age should be less than 120")
     private Byte age;
 
-    @Column
-    @NotEmpty(message = "Username should not be empty")
-    @Size(min = 3, max = 100, message = "Username must be between 3 and 100 characters long")
-    private String username;
+    @Column(unique = true)
+    private String email;
 
     @Column
-    @NotEmpty(message = "Password should not be empty")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -63,11 +50,13 @@ public class User implements UserDetails {
 
     public User() {}
 
-    public User(String name, String surname, Byte age, String username) {
-        this.name = name;
-        this.surname = surname;
+    public User(String firstName, String lastName, Byte age, String email, String password, Set<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.age = age;
-        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -78,20 +67,20 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Byte getAge() {
@@ -102,7 +91,11 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public void setUsername(String username) { this.username = username; }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) { this.email = email; }
 
     public void setPassword(String password) { this.password = password; }
 
@@ -117,7 +110,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.email;
     }
 
     @Override
