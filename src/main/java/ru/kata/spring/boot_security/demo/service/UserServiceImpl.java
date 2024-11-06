@@ -43,12 +43,16 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public void updateUser(User user) {
         User userById = getUserById(user.getId());
+
+        userById.setFirstName(user.getFirstName());
+        userById.setLastName(user.getLastName());
+        userById.setEmail(user.getEmail());
+        userById.setRoles(user.getRoles());
+
         if (user.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-        } else {
-            user.setPassword(user.getPassword());
         }
-        userRepository.save(user);
+        userRepository.save(userById);
     }
 
     @Override
@@ -66,14 +70,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByUsername(String email) {
         return userRepository.findByEmail(email);
-    }
-    
-    @Override
-    @Transactional
-    public void registerUser(User user) {
-        String encode = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encode);
-        userRepository.save(user);
     }
 
     @PostConstruct
