@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar mb-3 navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <div class="navbar-brand" id="navbar">
+    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item me-2">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2 px-0 vh-100">
+      <div class="list-group list-group-flush bg-white " id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-admin-list" data-bs-toggle="list" href="#list-admin" role="tab" aria-controls="home">
+          Admin</a>
+        <a class="list-group-item list-group-item-action" id="list-user-list" href="/user" role="tab">
+          User</a>
+      </div>
+    </div>
+    <div class="col-10 bg-light px-4">
+      <div class="tab-content" id="list-nav-tabContent">
+        <div class="tab-pane fade show active" id="list-admin" role="tabpanel" aria-labelledby="list-admin-list">
+            <div class="container-fluid">
+              <h1 class="mb-3 gx-5">Admin panel</h1>
+              <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-users" role="tab" aria-controls="nav-home" aria-selected="true">Users table</a>
+                <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-new-user" role="tab" aria-controls="nav-profile" aria-selected="false">New user</a>
+              </nav>
+              <div class="tab-content border bg-white" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-home-tab">
+                  <blockquote class="blockquote bg-light">
+                    <h3 class="p-3 border-bottom">All users</h3>
+                  </blockquote>
+                  <div class="container-fluid mt-4 gx-5">
+                    <div class="table-responsive border-top">
+                      <table class="table table-borderless table-striped">
+                        <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">First Name</th>
+                          <th scope="col">Last Name</th>
+                          <th scope="col">Age</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Role</th>
+                          <th scope="col">Edit</th>
+                          <th scope="col">Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Модальное окно update-->
+              <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="updateModalLabel">Edit user</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <form id="updateForm">
+                      <div class="modal-body text-center mb-2">
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="updateId" class="form-label fw-bold">ID</label>
+                          <input type="text" class="form-control" id="updateId" disabled>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="updateFirstName" class="form-label fw-bold">First name</label>
+                          <input type="text" class="form-control" minlength="2" maxlength="32" id="updateFirstName" placeholder="First name" required>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="updateLastName" class="form-label fw-bold">Last name</label>
+                          <input type="text" class="form-control" id="updateLastName" minlength="2" maxlength="32" placeholder="Last name" required>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="updateAge" class="form-label fw-bold">Age</label>
+                          <input type="number" min="0" max="120" class="form-control" id="updateAge" placeholder="Age" required>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="updateEmail" class="form-label fw-bold">Email</label>
+                          <input type="email" class="form-control" id="updateEmail" placeholder="Email" required>
+                        </div>
+                        <div class="form-group mb-2 offset-md-3 w-50">
+                          <label for="updatePassword" class="form-label fw-bold">Password</label>
+                          <input type="password" class="form-control" id="updatePassword">
+                        </div>
+                        <div class="form-group mb-2 offset-md-3 w-50">
+                          <label for="updateRole" class="form-label fw-bold mb-0">Role</label>
+                          <select class="form-select"
+                                  id="updateRole" size="2"
+                                  multiple="multiple" required>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" id="closeUpdate" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Модальное окно delete-->
+              <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="deleteModalLabel">Delete user</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <form id="deleteForm">
+                      <div class="modal-body text-center mb-2">
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="deleteId" class="form-label fw-bold">ID</label>
+                          <input type="text" class="form-control" id="deleteId" disabled>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="deleteFirstName" class="form-label fw-bold">First name</label>
+                          <input type="text" class="form-control" id="deleteFirstName" placeholder="First name" disabled>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="deleteLastName" class="form-label fw-bold">Last name</label>
+                          <input type="text" class="form-control" id="deleteLastName" placeholder="Last name" disabled>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="deleteAge" class="form-label fw-bold">Age</label>
+                          <input type="text" class="form-control" id="deleteAge" placeholder="Age" disabled>
+                        </div>
+                        <div class="from-group mb-2 offset-md-3 w-50">
+                          <label for="deleteEmail" class="form-label fw-bold">Email</label>
+                          <input type="email" class="form-control" id="deleteEmail" placeholder="Email" disabled>
+                        </div>
+                        <div class="form-group mb-2 offset-md-3 w-50">
+                          <label for="deleteRole" class="form-label fw-bold mb-0">Role</label>
+                          <select class="form-select"
+                                   size="2" id="deleteRole"
+                                  multiple="multiple" disabled>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" id="closeDelete" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Форма для добавления User`а-->
+              <div class="tab-content border" id="nav-tabContent2">
+                <div class="tab-pane fade bg-white" id="nav-new-user" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <div class="container-fluid px-0">
+                    <h3 class="bg-light p-3 border-bottom">Add new user</h3>
+                  </div>
+                  <div class="card-body col-3 mx-auto text-center mt-2">
+                    <form id="newUserForm" class="row text-center mb-10 gy-2 pb-3 pt-3">
+                      <label for="newFirstName" class="form-label fw-bold mb-0">First name</label>
+                      <input type="text" name="firstName" class="form-control" maxlength="32" id="newFirstName" placeholder="First name" required>
+
+                      <label for="newLastName" class="form-label fw-bold mb-0">Last name</label>
+                      <input type="text" name="lastName" class="form-control" maxlength="32" id="newLastName" placeholder="Last name" required>
+
+                      <label for="newAge" class="form-label fw-bold mb-0">Age</label>
+                      <input type="number" name="age" class="form-control" id="newAge" min="0" max="120"  placeholder="Age" required>
+
+                      <label for="newEmail" class="form-label fw-bold mb-0">Email</label>
+                      <input type="email" name="email" class="form-control" id="newEmail" placeholder="Email" required>
+
+                      <label for="newPassword" class="form-label fw-bold mb-0">Password</label>
+                      <input type="password" name="password" class="form-control" id="newPassword" placeholder="Password" required>
+
+                      <label for="newRole" class="form-label fw-bold md-2">Roles</label>
+                      <select class="form-control" multiple id="newRole" name="roles">
+                      </select>
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-success p-2">Add new user</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const url = "/api/users";
+
+  document.addEventListener('DOMContentLoaded', async function () {
+    await createTableBody()
+    await navbarCompletion()
+    await getRoles()
+  });
+
+  // Заполнение навигационной панели
+  function navbarCompletion() {
+    fetch(`api/user`)
+            .then(response => response.json())
+            .then(user => {
+              console.log(user)
+              const roles = user.roles.map(role => role.roleName.replace('ROLE_', '')).join(', ');
+
+              document.getElementById('navbar').innerHTML = ` <span class="fw-bold" >${user.email}</span><span>with roles: ${roles}</span>`
+            })
+            .catch(error => console.log(error))
+  }
+
+
+  // Вывод всех пользователей в таблицу
+  function createTableBody() {
+    fetch(url)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Не удалось загрузить пользователей');
+              } else {
+                return response.json();
+              }
+              })
+            .then(users => {
+              const tbody = document.getElementById("tbody");
+              tbody.innerHTML = ``;
+              users.forEach(user => {
+                const roles = user.roles.map(role => role.roleName.replace('ROLE_', '')).join(', ');
+
+                tbody.innerHTML += `
+                      <tr>
+                          <td>${user.id}</td>
+                          <td>${user.firstName}</td>
+                          <td>${user.lastName}</td>
+                          <td>${user.age}</td>
+                          <td>${user.email}</td>
+                          <td> ${roles}</td>
+                          <td>
+                             <button id="edit-user" type="button" onclick="openEditModal(${user.id})" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#updateModal">
+                             Edit
+                             </button>
+                          </td>
+                          <td>
+                             <button id="delete-user" type="button" onclick="openDeleteModal(${user.id})" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" >
+                             Delete
+                             </button>
+                          </td>
+                      </tr>
+                      `
+                })
+            })
+            .catch(error => console.error(error))
+  }
+
+  // Заполнение ролей в Selects
+  function getRoles() {
+    fetch('api/roles')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Не удалось получить список ролей');
+              } else {
+                return response.json();
+              }
+            })
+            .then(roles => {
+              const newSelect = document.getElementById('newRole');
+              const updateSelect = document.getElementById('updateRole');
+              newSelect.innerHTML = ``;
+              updateSelect.innerHTML = ``;
+              roles.forEach(role => {
+                const newOption = document.createElement('option');
+                newOption.value = role.id;
+                newOption.text = role.roleName.replace('ROLE_', '');
+                const updateOption = document.createElement('option');
+                updateOption.value = role.id;
+                updateOption.text = role.roleName.replace('ROLE_', '');
+                newSelect.appendChild(newOption);
+                updateSelect.appendChild(updateOption);
+              })
+
+            })
+            .catch(error => console.error(error))
+  }
+
+  // Обработка формы добавления пользователя
+  const newUserForm = document.getElementById('newUserForm');
+  newUserForm.addEventListener('submit',event => {
+    event.preventDefault();
+
+    const newUser = {
+      firstName: document.getElementById('newFirstName').value,
+      lastName: document.getElementById('newLastName').value,
+      age: document.getElementById('newAge').value,
+      email: document.getElementById('newEmail').value,
+      password: document.getElementById('newPassword').value,
+      roles: Array.from(document.getElementById('newRole').selectedOptions).map(option => parseInt(option.value, 10))
+    }
+    console.log(newUser);
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUser)
+    })
+            .then(response => {
+              if (response.ok) {
+                createTableBody();
+                console.log("Пользователь успешно добавлен");
+                newUserForm.reset();
+                document.getElementById('nav-home-tab').click();
+              } else {
+                throw new Error("Не удалось добавить пользователя")
+              }
+            })
+            .catch(error => console.error(error))
+  })
+
+  // Заполнение модального окна редактирования
+  async function openEditModal(userId) {
+    await fetch(`${url}/${userId}`)
+            .then(response => {
+              if(!response.ok) {
+                throw new Error('Не удалось найти пользователя');
+              } else {
+                return response.json();
+              }
+            })
+            .then(user => {
+              console.log(user);
+              document.getElementById('updateId').value = user.id;
+              document.getElementById('updateFirstName').value = user.firstName;
+              document.getElementById('updateLastName').value = user.lastName;
+              document.getElementById('updateAge').value = user.age;
+              document.getElementById('updateEmail').value = user.email;
+            })
+            .catch(error => console.error(error));
+  }
+
+  // Обработка формы редактирования пользователя
+  document.getElementById('updateForm').addEventListener('submit', event => {
+  event.preventDefault()
+
+    const user = {
+      id: document.getElementById('updateId').value,
+      firstName: document.getElementById('updateFirstName').value,
+      lastName: document.getElementById('updateLastName').value,
+      age: document.getElementById('updateAge').value,
+      email: document.getElementById('updateEmail').value,
+      password: document.getElementById('updatePassword').value,
+      roles: Array.from(document.getElementById('updateRole').selectedOptions).map(option => parseInt(option.value, 10))
+    }
+    console.log(user)
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+            .then(response => {
+              if (response.ok) {
+                createTableBody();
+                console.log("Данные пользователя успешно обновлены");
+                document.getElementById('closeUpdate').click();
+              } else {
+                throw new Error("Не удалось обновить данные пользователя")
+              }
+            })
+            .catch(error => console.error(error))
+  })
+
+  // Заполнение модального окна удаления
+  async function openDeleteModal(userId) {
+    await fetch(`${url}/${userId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Не удалось найти пользователя');
+              } else {
+                return response.json();
+              }
+            })
+            .then(user => {
+              console.log(user);
+              document.getElementById('deleteId').value = user.id;
+              document.getElementById('deleteFirstName').value = user.firstName;
+              document.getElementById('deleteLastName').value = user.lastName;
+              document.getElementById('deleteAge').value = user.age;
+              document.getElementById('deleteEmail').value = user.email;
+              let deleteRole = document.getElementById('deleteRole');
+              deleteRole.innerHTML = ``;
+              user.roles.forEach(role => {
+                deleteRole.innerHTML += `<option value="${role.id}">${role.roleName.replace('ROLE_', '')}</option>`;
+              })
+            })
+            .catch(error => console.error(error));
+  }
+
+  // Обработка формы удаления пользователя
+  document.getElementById('deleteForm').addEventListener('submit', event => {
+    event.preventDefault()
+    const userId = document.getElementById('deleteId').value;
+    fetch(`${url}/${userId}`, {
+      method: "DELETE"
+    })
+            .then(response => {
+              if (response.ok) {
+                createTableBody();
+                console.log("Пользователь успешно удален");
+                document.getElementById('closeDelete').click();
+              } else {
+                throw new Error("Не удалось удалить пользователя")
+              }
+            })
+            .catch(error => console.error(error))
+  })
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

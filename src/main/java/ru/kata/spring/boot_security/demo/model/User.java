@@ -3,7 +3,6 @@ package ru.kata.spring.boot_security.demo.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +13,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,21 +32,30 @@ public class User implements UserDetails {
     private Long id;
 
     @Column
+    @NotEmpty
+    @Size(max = 32)
     private String firstName;
 
     @Column
+    @NotEmpty
+    @Size(max = 32)
     private String lastName;
 
     @Column
+    @Min(value = 0)
+    @Max(value = 120)
     private Byte age;
 
     @Column(unique = true)
+    @NotEmpty
+    @Email
     private String email;
 
     @Column
+    @NotEmpty
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

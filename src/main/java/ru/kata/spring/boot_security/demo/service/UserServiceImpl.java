@@ -1,17 +1,15 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -21,7 +19,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
@@ -46,11 +44,12 @@ public class UserServiceImpl implements UserService{
 
         userById.setFirstName(user.getFirstName());
         userById.setLastName(user.getLastName());
+        userById.setAge(user.getAge());
         userById.setEmail(user.getEmail());
         userById.setRoles(user.getRoles());
 
-        if (user.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!user.getPassword().isBlank()) {
+            userById.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userRepository.save(userById);
     }
@@ -70,13 +69,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByUsername(String email) {
         return userRepository.findByEmail(email);
-    }
-
-    @PostConstruct
-    public void init() {
-        User user = new User("admin", "admin", (byte) 35,
-                "admin@mail.ru", passwordEncoder.encode("100"),Set.of(new Role("ROLE_ADMIN")));
-        userRepository.save(user);
     }
 }
 
