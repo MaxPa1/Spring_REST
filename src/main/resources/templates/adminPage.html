@@ -205,7 +205,7 @@
   </div>
 </div>
 <script>
-  const url = "/api/users";
+  const url = "/api/admin/users";
 
   document.addEventListener('DOMContentLoaded', async function () {
     await createTableBody()
@@ -270,7 +270,7 @@
 
   // Заполнение ролей в Selects
   function getRoles() {
-    fetch('api/roles')
+    fetch('api/admin/roles')
             .then(response => {
               if (!response.ok) {
                 throw new Error('Не удалось получить список ролей');

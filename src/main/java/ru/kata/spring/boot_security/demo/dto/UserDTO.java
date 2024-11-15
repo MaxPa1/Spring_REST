@@ -5,6 +5,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class UserDTO {
     @Email
     private String email;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 
     private Set<Role> roles;
